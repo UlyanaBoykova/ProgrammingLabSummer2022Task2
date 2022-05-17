@@ -18,7 +18,10 @@ class FindTest {
     public void testFile1() {
         assertEquals("Файл File1 не существует",
                 fileFind.main(new String[]{"-d", new File("").getAbsolutePath(), "File1"}));
+    }
 
+    @Test
+    public void testFile1_1() {
         assertEquals("Путь к файлу File1" + ":" + file1.getAbsolutePath(),
                 fileFind.main(new String[]{"-r", "File1"}));
     }
