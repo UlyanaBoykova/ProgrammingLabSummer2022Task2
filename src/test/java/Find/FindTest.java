@@ -7,17 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FindTest {
     Find fileFind = new Find();
-
-    File file1 = new File(new File("").getAbsolutePath() + "/Directory/Directory1", "File1");
-    File file2 = new File(new File("").getAbsolutePath() + "/Directory/Directory2", "File2");
-    File file3 = new File(new File("").getAbsolutePath() + "/Directory", "File3");
-    File file5 = new File(new File("").getAbsolutePath(), "File5");
-    File file6 = new File(new File("").getAbsolutePath() + "/Directory/Directory2/Directory3", "File6");
+    String pathDefault = new File("").getAbsolutePath();
+    File file1 = new File(pathDefault + "/Directory/Directory1", "File1");
+    File file2 = new File(pathDefault + "/Directory/Directory2", "File2");
+    File file3 = new File(pathDefault + "/Directory", "File3");
+    File file5 = new File(pathDefault, "File5");
+    File file6 = new File(pathDefault + "/Directory/Directory2/Directory3", "File6");
 
     @Test
     public void testFile1() {
         assertEquals("Файл File1 не существует",
-                fileFind.main(new String[]{"-d", new File("").getAbsolutePath(), "File1"}));
+                fileFind.main(new String[]{"-d", pathDefault, "File1"}));
     }
 
     @Test
@@ -28,7 +28,7 @@ class FindTest {
     @Test
     public void testFile2() {
         assertEquals("Путь к файлу File2" + ":" + file2.getAbsolutePath(),
-                fileFind.main(new String[]{"-r", "-d", new File("").getAbsolutePath(), "File2"}));
+                fileFind.main(new String[]{"-r", "-d", pathDefault, "File2"}));
     }
     @Test
     public void testFile3() {
@@ -38,7 +38,7 @@ class FindTest {
     @Test
     public void testFile4() {
         assertEquals("Файл File4 не существует",
-                fileFind.main(new String[]{"-r", "-d", new File("").getAbsolutePath(), "File4"}));
+                fileFind.main(new String[]{"-r", "-d", pathDefault, "File4"}));
     }
 
     @Test
@@ -50,7 +50,7 @@ class FindTest {
     @Test
     public void testFile6() {
         assertEquals("Путь к файлу File6" + ":" + file6.getAbsolutePath(),
-                fileFind.main(new String[]{"-r", "-d", new File("").getAbsolutePath(), "File6"}));
+                fileFind.main(new String[]{"-r", "-d", pathDefault, "File6"}));
     }
 
     @Test

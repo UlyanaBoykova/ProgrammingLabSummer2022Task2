@@ -14,33 +14,44 @@ public class Find {
     @Option(name = "-d")
     private File directory;
 
-    @Argument
-    private File fileName;
+    @Argument(required = true)
+    private String fileName;
 
-
-    private String find(File directory, File fileName) {
-        String result = "Файл " + fileName.getName() + " не существует";
+    private String findDirectory(File directory, String fileName) {
+        String result = "Файл " + fileName + " не существует";
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
-                if (subdirectory) {
-                    if (file.isDirectory() &&
-                            (!result.equals(find(file, fileName))))
-                        return find(file, fileName);
-                }
-                if (file.getName().equals(fileName.getName()))
-                    result = "Путь к файлу " + fileName.getName() + ":" + file.getAbsolutePath();
+                if (file.getName().equals(fileName))
+                    result = "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
             }
         }
         return result;
     }
 
+    private String findSubdirectory(File directory, String fileName) {
+        String result = "Файл " + fileName + " не существует";
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (subdirectory) {
+                    if (file.isDirectory() &&
+                            (!result.equals(findSubdirectory(file, fileName))))
+                        return findSubdirectory(file, fileName);
+                }
+                if (file.getName().equals(fileName))
+                    result = "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
+            }
+        }
+        return result;
+    }
 
     public String main(String[] args) {
+        File directoryDefault = new File(new File("").getAbsolutePath());
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
-            if (fileName.getName().isEmpty()) throw new IllegalArgumentException("");
+            if (fileName.isEmpty()) throw new IllegalArgumentException("");
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             throw new IllegalArgumentException("");
@@ -52,10 +63,15 @@ public class Find {
             System.out.println("Command Line: -r -d directory filename.txt");
             System.exit(1);
         }
-        if (directory != null) {
-            return find(directory, fileName);
+        if ((directory != null) && subdirectory){
+            return findSubdirectory(directory, fileName);
         }
-        File directory1 = new File(new File("").getAbsolutePath());
-        return find(directory1, fileName);
+        else if ((directory == null) && (!subdirectory)){
+            return findDirectory(directoryDefault, fileName);
+        }
+        else if (directory != null) {
+            return findDirectory(directory, fileName);
+        }
+        else return findSubdirectory(directoryDefault, fileName);
     }
 }
