@@ -23,7 +23,7 @@ public class Find {
         if (files != null) {
             for (File file : files) {
                 if (file.getName().equals(fileName))
-                    result = "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
+                    return "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
             }
         }
         return result;
@@ -40,7 +40,7 @@ public class Find {
                         return findSubdirectory(file, fileName);
                 }
                 if (file.getName().equals(fileName))
-                    result = "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
+                    return "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
             }
         }
         return result;
