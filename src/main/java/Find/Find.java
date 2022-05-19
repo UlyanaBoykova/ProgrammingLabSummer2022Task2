@@ -5,6 +5,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import java.io.File;
+import java.util.Objects;
 
 public class Find {
 
@@ -15,29 +16,32 @@ public class Find {
     private File directory;
 
     @Argument(required = true)
-    private String fileName;
+    private String fileNames;
 
-    private String findDirectory(File directory, String fileName) {
-        String result = "Файл " + fileName + " не существует";
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.getName().equals(fileName))
-                    return "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
+    private String findSetFiles(File directory, String fileNamesSet) {
+        boolean firstFile = true;
+        StringBuilder result = null;
+        String[] fileSet = fileNamesSet.split(", ");
+        for (String fileName: fileSet) {
+            if (firstFile){
+                firstFile = false;
+                result = new StringBuilder(findOneFile(directory, fileName));
             }
+            else result.append("\n").append(findOneFile(directory, fileName));
         }
-        return result;
+        assert result != null;
+        return result.toString();
     }
 
-    private String findSubdirectory(File directory, String fileName) {
+    private String findOneFile(File directory, String fileName) {
         String result = "Файл " + fileName + " не существует";
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (subdirectory) {
                     if (file.isDirectory() &&
-                            (!result.equals(findSubdirectory(file, fileName))))
-                        return findSubdirectory(file, fileName);
+                            (!result.equals(findOneFile(file, fileName))))
+                        return findOneFile(file, fileName);
                 }
                 if (file.getName().equals(fileName))
                     return "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
@@ -46,12 +50,12 @@ public class Find {
         return result;
     }
 
-    public String main(String[] args) {
+    public String launcher(String[] args) {
         File directoryDefault = new File(new File("").getAbsolutePath());
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
-            if (fileName.isEmpty()) throw new IllegalArgumentException("");
+            if (fileNames.isEmpty()) throw new IllegalArgumentException("");
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             throw new IllegalArgumentException("");
@@ -63,15 +67,6 @@ public class Find {
             System.out.println("Command Line: -r -d directory filename.txt");
             System.exit(1);
         }
-        if ((directory != null) && subdirectory){
-            return findSubdirectory(directory, fileName);
-        }
-        else if ((directory == null) && (!subdirectory)){
-            return findDirectory(directoryDefault, fileName);
-        }
-        else if (directory != null) {
-            return findDirectory(directory, fileName);
-        }
-        else return findSubdirectory(directoryDefault, fileName);
+        return findSetFiles(Objects.requireNonNullElse(directory, directoryDefault), fileNames);
     }
 }
