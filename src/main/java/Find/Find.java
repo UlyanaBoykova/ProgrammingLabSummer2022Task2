@@ -55,18 +55,14 @@ public class Find {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
-            if (fileNames.isEmpty()) throw new IllegalArgumentException("");
-        } catch (CmdLineException e) {
-            System.err.println(e.getMessage());
-            throw new IllegalArgumentException("");
-        }
-        try {
-            parser.parseArgument(args);
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             System.out.println("Command Line: -r -d directory filename.txt");
             System.exit(1);
         }
+        if (fileNames.isEmpty()) throw new IllegalArgumentException("");
+
+
         return findFiles(Objects.requireNonNullElse(directory, directoryDefault), fileNames);
     }
 }
