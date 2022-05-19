@@ -18,11 +18,11 @@ public class Find {
     @Argument(required = true)
     private String fileNames;
 
-    private String findSetFiles(File directory, String fileNamesSet) {
+    private String findFiles(File directory, String fileNames) {
         boolean firstFile = true;
         StringBuilder result = null;
-        String[] fileSet = fileNamesSet.split(", ");
-        for (String fileName: fileSet) {
+        String[] fileNames1 = fileNames.split(", ");
+        for (String fileName: fileNames1) {
             if (firstFile){
                 firstFile = false;
                 result = new StringBuilder(findOneFile(directory, fileName));
@@ -67,6 +67,6 @@ public class Find {
             System.out.println("Command Line: -r -d directory filename.txt");
             System.exit(1);
         }
-        return findSetFiles(Objects.requireNonNullElse(directory, directoryDefault), fileNames);
+        return findFiles(Objects.requireNonNullElse(directory, directoryDefault), fileNames);
     }
 }
