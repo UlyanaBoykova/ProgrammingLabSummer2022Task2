@@ -32,7 +32,7 @@ class FindTest {
     public void testFiles2_6WithKey_rAndKey_d() {
         assertEquals("Путь к файлу File2:" + file2.getAbsolutePath() + "\n" +
                              "Путь к файлу File6:" + file6.getAbsolutePath(),
-                fileFind.launcher(new String[]{"-r", "-d", pathDefault, "File2, File6"}));
+                fileFind.launcher(new String[]{"-r", "-d", pathDefault, "File2", "File6"}));
     }
     @Test
     public void testFile3WithKey_r() {
@@ -45,7 +45,7 @@ class FindTest {
         assertEquals("Путь к файлу File3:" + file3.getAbsolutePath() + "\n" +
                              "Путь к файлу File8:" + file8.getAbsolutePath() + "\n" +
                              "Путь к файлу File9:" + file9.getAbsolutePath(),
-                fileFind.launcher(new String[]{"-r", "File3, File8, File9"}));
+                fileFind.launcher(new String[]{"-r", "File3", "File8", "File9"}));
     }
 
     @Test
@@ -64,7 +64,7 @@ class FindTest {
     public void testFile5_7WithoutKeys() {
         assertEquals("Путь к файлу File5:" + file5.getAbsolutePath() + "\n" +
                              "Путь к файлу File7:" + file7.getAbsolutePath(),
-                fileFind.launcher(new String[]{"File5, File7"}));
+                fileFind.launcher(new String[]{"File5", "File7"}));
     }
 
     @Test

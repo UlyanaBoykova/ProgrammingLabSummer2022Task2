@@ -5,6 +5,8 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 public class Find {
@@ -15,14 +17,13 @@ public class Find {
     @Option(name = "-d")
     private File directory;
 
-    @Argument(required = true)
-    private String fileNames;
+    @Argument
+    private String[] fileNames;
 
-    private String findFiles(File directory, String fileNames) {
+    private String findFiles(File directory, String[] fileNames) {
         boolean firstFile = true;
         StringBuilder result = null;
-        String[] fileNames1 = fileNames.split(", ");
-        for (String fileName: fileNames1) {
+        for (String fileName: fileNames) {
             if (firstFile){
                 firstFile = false;
                 result = new StringBuilder(findOneFile(directory, fileName));
@@ -34,6 +35,7 @@ public class Find {
     }
 
     private String findOneFile(File directory, String fileName) {
+        if (fileName.isEmpty()) throw new IllegalArgumentException("");
         String result = "Файл " + fileName + " не существует";
         File[] files = directory.listFiles();
         if (files != null) {
@@ -60,9 +62,6 @@ public class Find {
             System.out.println("Command Line: -r -d directory filename.txt");
             System.exit(1);
         }
-        if (fileNames.isEmpty()) throw new IllegalArgumentException("");
-
-
         return findFiles(Objects.requireNonNullElse(directory, directoryDefault), fileNames);
     }
 }
