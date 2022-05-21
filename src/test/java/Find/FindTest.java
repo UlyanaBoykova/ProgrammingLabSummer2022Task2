@@ -5,7 +5,7 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FindTest {
-    Find fileFind = new Find();
+    Launcher fileFind = new Launcher();
     String pathDefault = new File("").getAbsolutePath();
     String path1 = new File("").getAbsolutePath() + "/Directory";
     String path2 = new File("").getAbsolutePath() + "/Directory/Directory2";
@@ -19,16 +19,17 @@ class FindTest {
     File file9 = new File(pathDefault + "/Directory", "File9");
 
     @Test
+    public void testFile1WithKey_r() {
+        assertEquals("Путь к файлу File1:" + file1.getAbsolutePath(),
+                fileFind.launcher(new String[]{"-r", "File1"}));
+    }
+
+    @Test
     public void testFile1WithKey_d() {
         assertEquals("Файл File1 не существует",
                 fileFind.launcher(new String[]{"-d", pathDefault, "File1"}));
     }
 
-    @Test
-    public void testFile1WithKey_r() {
-        assertEquals("Путь к файлу File1:" + file1.getAbsolutePath(),
-                fileFind.launcher(new String[]{"-r", "File1"}));
-    }
     @Test
     public void testFiles2_6WithKey_rAndKey_d() {
         assertEquals("Путь к файлу File2:" + file2.getAbsolutePath() + "\n" +

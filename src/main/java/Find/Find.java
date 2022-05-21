@@ -1,63 +1,38 @@
 package Find;
 
-import org.kohsuke.args4j.Argument;
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.Option;
 import java.io.File;
-import java.util.Objects;
 
 public class Find {
 
-    @Option(name = "-r")
-    private boolean subdirectory;
-
-    @Option(name = "-d")
-    private File directory;
-
-    @Argument
-    private String[] fileNames;
-
-    private String findFiles(File directory, String[] fileNames) {
+    public String findFiles(Launcher launcher) {
         boolean firstFile = true;
         StringBuilder result = new StringBuilder();
-        for (String fileName: fileNames) {
+        for (String fileName: launcher.getFileNames()) {
             if (firstFile){
                 firstFile = false;
-                result.append(findOneFile(directory, fileName));
+                result.append(findOneFile(launcher.getDirectory(), fileName, launcher.getSubdirectory()));
             }
-            else result.append("\n").append(findOneFile(directory, fileName));
+            else result.append("\n").append(findOneFile(launcher.getDirectory(), fileName, launcher.getSubdirectory()));
         }
         return result.toString();
     }
 
-    private String findOneFile( File directory,  String fileName) {
+    private String findOneFile( File directory,  String fileName, boolean subdirectory) {
         String result = "Файл " + fileName + " не существует";
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (subdirectory) {
                     if (file.isDirectory() &&
-                            (!result.equals(findOneFile(file, fileName))))
-                        return findOneFile(file, fileName);
+                            (!result.equals(findOneFile(file, fileName, true)))) {
+                        return findOneFile(file, fileName, true);
+                    }
                 }
-                if (file.getName().equals(fileName))
+                if (file.getName().equals(fileName)) {
                     return "Путь к файлу " + fileName + ":" + file.getAbsolutePath();
+                }
             }
         }
         return result;
-    }
-
-    public String launcher(String[] args) {
-        File directoryDefault = new File(new File("").getAbsolutePath());
-        CmdLineParser parser = new CmdLineParser(this);
-        try {
-            parser.parseArgument(args);
-        } catch (CmdLineException e) {
-            System.err.println(e.getMessage());
-            System.out.println("Command Line: -r -d directory filename.txt");
-            System.exit(1);
-        }
-        return findFiles(Objects.requireNonNullElse(directory, directoryDefault), fileNames);
     }
 }
