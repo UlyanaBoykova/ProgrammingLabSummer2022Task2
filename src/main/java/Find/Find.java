@@ -5,8 +5,6 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 public class Find {
@@ -22,20 +20,18 @@ public class Find {
 
     private String findFiles(File directory, String[] fileNames) {
         boolean firstFile = true;
-        StringBuilder result = null;
+        StringBuilder result = new StringBuilder();
         for (String fileName: fileNames) {
             if (firstFile){
                 firstFile = false;
-                result = new StringBuilder(findOneFile(directory, fileName));
+                result.append(findOneFile(directory, fileName));
             }
             else result.append("\n").append(findOneFile(directory, fileName));
         }
-        assert result != null;
         return result.toString();
     }
 
-    private String findOneFile(File directory, String fileName) {
-        if (fileName.isEmpty()) throw new IllegalArgumentException("");
+    private String findOneFile( File directory,  String fileName) {
         String result = "Файл " + fileName + " не существует";
         File[] files = directory.listFiles();
         if (files != null) {

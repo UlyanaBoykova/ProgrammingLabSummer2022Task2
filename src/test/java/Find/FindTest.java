@@ -3,11 +3,12 @@ package Find;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FindTest {
     Find fileFind = new Find();
     String pathDefault = new File("").getAbsolutePath();
+    String path1 = new File("").getAbsolutePath() + "/Directory";
+    String path2 = new File("").getAbsolutePath() + "/Directory/Directory2";
     File file1 = new File(pathDefault + "/Directory/Directory1", "File1");
     File file2 = new File(pathDefault + "/Directory/Directory2", "File2");
     File file3 = new File(pathDefault + "/Directory", "File3");
@@ -32,7 +33,7 @@ class FindTest {
     public void testFiles2_6WithKey_rAndKey_d() {
         assertEquals("Путь к файлу File2:" + file2.getAbsolutePath() + "\n" +
                              "Путь к файлу File6:" + file6.getAbsolutePath(),
-                fileFind.launcher(new String[]{"-r", "-d", pathDefault, "File2", "File6"}));
+                fileFind.launcher(new String[]{"-r", "-d", path1, "File2", "File6"}));
     }
     @Test
     public void testFile3WithKey_r() {
@@ -70,13 +71,7 @@ class FindTest {
     @Test
     public void testFile6WithKey_rAndKey_d() {
         assertEquals("Путь к файлу File6:" + file6.getAbsolutePath(),
-                fileFind.launcher(new String[]{"-r", "-d", pathDefault, "File6"}));
-    }
-
-    @Test
-    public void testThrows() {
-        assertThrows(IllegalArgumentException.class, () ->
-                fileFind.launcher(new String[]{""}));
+                fileFind.launcher(new String[]{"-r", "-d", path2, "File6"}));
     }
 
 }
