@@ -4,17 +4,16 @@ import java.io.File;
 
 public class Find {
 
-    public String findFiles(Launcher launcher) {
-        boolean firstFile = true;
-        StringBuilder result = new StringBuilder();
+
+    public void findFiles(Launcher launcher) {
+        boolean firstLine = true;
         for (String fileName: launcher.getFileNames()) {
-            if (firstFile){
-                firstFile = false;
-                result.append(findOneFile(launcher.getDirectory(), fileName, launcher.getSubdirectory()));
-            }
-            else result.append("\n").append(findOneFile(launcher.getDirectory(), fileName, launcher.getSubdirectory()));
+            if (firstLine) {
+                firstLine = false;
+            } else System.out.print("\n");
+            System.out.print(findOneFile(launcher.getDirectory(), fileName, launcher.getSubdirectory()));
+
         }
-        return result.toString();
     }
 
     private String findOneFile( File directory,  String fileName, boolean subdirectory) {

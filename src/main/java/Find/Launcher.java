@@ -38,7 +38,7 @@ public class Launcher {
         return fileNames;
     }
 
-    public String launcher(String[] args) {
+    public boolean launcher(String[] args) {
         Find find = new Find();
         File directoryDefault = new File(new File("").getAbsolutePath());
         CmdLineParser parser = new CmdLineParser(this);
@@ -49,6 +49,7 @@ public class Launcher {
             System.out.println("Command Line: -r -d directory filename.txt");
             System.exit(1);
         }
-        return find.findFiles(new Launcher(subdirectory, Objects.requireNonNullElse(directory, directoryDefault), fileNames));
+        find.findFiles(new Launcher(subdirectory, Objects.requireNonNullElse(directory, directoryDefault), fileNames));
+        return false;
     }
 }
